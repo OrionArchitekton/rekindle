@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔥 Rekindle
 
-## Getting Started
+Your abandoned side project misses you.
 
-First, run the development server:
+Paste a dormant GitHub repo. Rekindle reads its README, commit history, and file
+tree, then delivers three things:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. **A diagnosis**: why the flame died, read honestly from the commit cadence and
+   the gap between README ambition and reality.
+2. **A rekindle plan**: three steps, the first one small enough to do in under 15
+   minutes tonight.
+3. **A corner speech**: a 90-word hype speech about YOUR project, by name, spoken
+   out loud like a cornerman between rounds.
+
+Built for the [DEV Weekend Challenge: Passion Edition](https://dev.to/challenges/weekend-2026-07-09),
+because passion is also the love that fuels late-night side projects, and every
+developer has one whose flame went quiet.
+
+## How it works
+
+```
+GitHub URL --> GitHub API (README, commits, tree)
+                 |
+                 v
+          Gemini 2.5 Flash (temperature 0, JSON output)
+                 |  diagnosis + embers + plan + hype speech
+                 v
+          ElevenLabs TTS --> your corner speech, out loud
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Google AI (Gemini 2.5 Flash)** reads the repo snapshot and writes the
+  diagnosis, plan, and speech as strict JSON (temperature 0, thinking disabled,
+  defensively parsed and clamped server-side).
+- **ElevenLabs** voices the speech (`eleven_multilingual_v2`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Run it locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm install
+cp .env.example .env.local   # fill in your keys
+pnpm dev
+```
 
-## Learn More
+| Env var | Required | Purpose |
+|---|---|---|
+| `GEMINI_API_KEY` | yes | Gemini API access |
+| `ELEVENLABS_API_KEY` | yes | Voice synthesis |
+| `ELEVENLABS_VOICE_ID` | no | Override the default voice |
+| `GITHUB_TOKEN` | no | Higher GitHub API rate limits |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | no | Durable rate limiting (Upstash REST also accepted) |
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm vitest run   # unit tests for the pure core (URL parse, prompt build, defensive parse)
+pnpm build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Security posture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- API keys live server-side only; the browser never sees them.
+- `/api/speak` only voices text this server generated: `/api/rekindle` signs the
+  hype speech with an HMAC token and `/api/speak` refuses anything unsigned
+  (verified with a forged-token 403 test). Nobody can use the endpoint as a free
+  TTS proxy.
+- Per-IP and global rate limits on both API routes (Upstash/Vercel KV when
+  configured, in-memory fallback otherwise).
+- Prompt injection: repo content (README, commit messages) is framed as data,
+  not instructions, and the model's output is schema-validated and length-clamped
+  before rendering.
 
-## Deploy on Vercel
+## Demo mode
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`/?demo=1` server-renders a frozen result so the demo is deterministic. The
+frozen content is a real captured output: a live `/api/rekindle` run against
+[OrionArchitekton/spark](https://github.com/OrionArchitekton/spark) (a genuinely
+abandoned New Year's Day project, quiet for 190 days), with the matching real
+ElevenLabs audio checked in as `public/demo-speech.mp3`. The UI discloses demo
+mode on the page.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Honesty notes
+
+- Built end-to-end in a Claude Code session (Claude Fable 5); the commit
+  trailers carry `Co-Authored-By: Claude Fable 5`. The human in the loop chose
+  the idea, gated the external actions, and owns the submission.
+- The demo-mode result is frozen but real (see above). Live mode calls Gemini
+  and ElevenLabs on every request.
