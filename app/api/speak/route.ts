@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid speech request." }, { status: 400 });
   }
 
-  // Only voice text this server generated and signed — keeps the TTS wallet closed.
+  // Only voice text this server generated and signed; keeps the TTS wallet closed.
   if (!verifySpeechToken(text, token)) {
     return NextResponse.json({ error: "Speech text not recognized." }, { status: 403 });
   }

@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   const { allowed } = await checkRateLimit("rekindle", clientIp(req), 6, 60);
   if (!allowed) {
     return NextResponse.json(
-      { error: "Easy, champ. Too many requests — try again in a minute." },
+      { error: "Easy, champ. Too many requests. Try again in a minute." },
       { status: 429 },
     );
   }
