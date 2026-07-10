@@ -26,6 +26,8 @@ and it gives you three things:
 3. **A corner speech**: a roughly 90-word hype speech about YOUR project, by
    name, delivered out loud like a cornerman between rounds.
 
+[IMAGE 1 HERE: upload docs/screenshots/result-top.png, then delete this line]
+
 The theme is passion. This is the tool for the week after the passion: the one
 that gets you to open the project again.
 
@@ -38,7 +40,7 @@ a result instantly, [this link](https://rekindle-sooty.vercel.app/?demo=1)
 renders a frozen real result (a live run against my abandoned `spark` repo,
 with the real ElevenLabs audio). Everything else is computed live per request.
 
-[BEFORE POSTING: upload docs/screenshots/result-top.png and docs/screenshots/result-full.png here as images, then delete this line]
+[IMAGE 2 HERE: upload docs/screenshots/result-full.png, then delete this line]
 
 ## Code
 
