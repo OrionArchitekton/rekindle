@@ -2,15 +2,15 @@
 
 Your abandoned side project misses you.
 
-Paste a dormant GitHub repo. Rekindle reads its README, commit history, and file
-tree, then delivers three things:
+Paste a dormant GitHub repo. Rekindle reads its README, recent commits, and
+top-level files, then delivers three things:
 
 1. **A diagnosis**: why the flame died, read honestly from the commit cadence and
    the gap between README ambition and reality.
 2. **A rekindle plan**: three steps, the first one small enough to do in under 15
    minutes tonight.
-3. **A corner speech**: a 90-word hype speech about YOUR project, by name, spoken
-   out loud like a cornerman between rounds.
+3. **A corner speech**: a roughly 90-word hype speech about YOUR project, by
+   name, spoken out loud like a cornerman between rounds.
 
 Built for the [DEV Weekend Challenge: Passion Edition](https://dev.to/challenges/weekend-2026-07-09),
 because passion is also the love that fuels late-night side projects, and every
@@ -72,7 +72,7 @@ pnpm build
 `/?demo=1` server-renders a frozen result so the demo is deterministic. The
 frozen content is a real captured output: a live `/api/rekindle` run against
 [OrionArchitekton/spark](https://github.com/OrionArchitekton/spark) (a genuinely
-abandoned New Year's Day project, quiet for 190 days), with the matching real
+abandoned project started as the new year turned, quiet for 190 days), with the matching real
 ElevenLabs audio checked in as `public/demo-speech.mp3`. The UI discloses demo
 mode on the page.
 

@@ -4,7 +4,7 @@ export type GeminiResult =
   | { ok: true; text: string }
   | { ok: false; error: "config" | "rate_limited" | "upstream" };
 
-/** Calls Gemini with temperature 0 for deterministic, demo-stable output. */
+/** Calls Gemini with temperature 0 for low-variance, demo-stable output. */
 export async function callGemini(prompt: string): Promise<GeminiResult> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return { ok: false, error: "config" };
